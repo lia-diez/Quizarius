@@ -1,4 +1,3 @@
-import {accountData} from "../types";
 
 export const saveAuth = (jwt: string)=> {
     if (!jwt) return;
@@ -8,7 +7,7 @@ export const saveAuth = (jwt: string)=> {
 }
 
 export const loadAuth = (): string=> {
-     return localStorage.getItem('bearer')
+     return localStorage.getItem('bearer') ?? '';
 }
 
 export const deleteAuth = (): void => {
