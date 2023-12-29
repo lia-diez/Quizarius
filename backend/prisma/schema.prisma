@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@localhost:5432/quizarius_db?schema=public"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String        @id @default(uuid())
+  login          String        @unique
+  // role is either "teacher" or "student"
+  role           String        @default("student")
+  hashedPassword String?       @map("hashed_password")
+  // if user is owner of a group, teacher:
+  Group          Group[]
+  // if user is a student:
+  GroupUser      GroupUser[]
+  UserAttempt    UserAttempt[]
+  JoinRequest    JoinRequest[]
+
+  @@map("user")
+}
+
+model Group {
+  id          String        @id @default(uuid())
+  ownerId     String        @map("owner_id")
+  name        String
+  description String?
+  owner       User          @relation(fields: [ownerId], references: [id])
+  GroupUser   GroupUser[]
+  JoinRequest JoinRequest[]
+  Quiz        Quiz[]
+
+  @@map("group")
+}
+
+model GroupUser {
+  id      String @id @default(uuid())
+  groupId String @map("group_id")
+  userId  String @map("user_id")
+  Group   Group  @relation(fields: [groupId], references: [id])
+  User    User   @relation(fields: [userId], references: [id])
+
+  @@map("group_user")
+}
+
+model JoinRequest {
+  id      String @id @default(uuid())
+  groupId String @map("group_id")
+  // shkolozavr:
+  userId  String @map("user_id")
+  Group   Group  @relation(fields: [groupId], references: [id])
+  User    User   @relation(fields: [userId], references: [id])
+
+  @@map("join_request")
+}
+
+model Quiz {
+  id               String         @id @default(uuid())
+  groupId          String         @map("group_id")
+  deadLine         DateTime?      @map("dead_line")
+  retries          Int?
+  timeLimitHours   Int?           @map("time_limit_hours")
+  timeLimitMinutes Int?           @map("time_limit_minutes")
+  name             String
+  isVisible        Boolean        @default(false) @map("is_visible")
+  group            Group          @relation(fields: [groupId], references: [id])
+  questions        QuizQuestion[]
+  UserAttempt      UserAttempt[]
+
+  @@map("quiz")
+}
+
+model QuizQuestion {
+  id             String               @id @default(uuid())
+  quizId         String?              @map("quiz_id")
+  isOpen         Boolean              @default(false) @map("is_open")
+  isMultiChoice  Boolean              @default(false) @map("is_multi_choice")
+  // it is the question itself
+  value          String?
+  Quiz           Quiz?                @relation(fields: [quizId], references: [id])
+  options        QuizQuestionOption[]
+  AttemptAnswers AttemptAnswer[]
+
+  @@map("quiz_question")
+}
+
+model QuizQuestionOption {
+  id             String         @id @default(uuid())
+  quizQuestionId String         @map("quiz_question_id")
+  isCorrect      Boolean        @default(false) @map("is_correct")
+  value          String
+  quizQuestion   QuizQuestion   @relation(fields: [quizQuestionId], references: [id])
+  AttemptOption  AnswerOption[]
+
+  @@map("quiz_question_option")
+}
+
+model UserAttempt {
+  id         String          @id @default(uuid())
+  quizId     String          @map("quiz_id")
+  userId     String          @map("user_id")
+  startedAt  DateTime        @map("stated_at")
+  finishedAt DateTime?       @map("finished_at")
+  Quiz       Quiz            @relation(fields: [quizId], references: [id])
+  User       User            @relation(fields: [userId], references: [id])
+  answers    AttemptAnswer[]
+
+  @@map("user_attempt")
+}
+
+model AttemptAnswer {
+  id            String         @id @default(uuid())
+  attemptId     String         @map("attempt_id")
+  questionId    String         @map("question_id")
+  UserAttempt   UserAttempt    @relation(fields: [attemptId], references: [id])
+  Question      QuizQuestion   @relation(fields: [questionId], references: [id])
+  answerOptions AnswerOption[]
+
+  @@map("attempt_answers")
+}
+
+model AnswerOption {
+  id              String              @id @default(uuid())
+  attemptAnswerId String?             @map("attempt_answer_id")
+  optionId        String?             @map("option_id")
+  openAnswer      String?             @map("open_answer")
+  isCorrect       Boolean?            @map("is_correct")
+  AttemptAnswer   AttemptAnswer?      @relation(fields: [attemptAnswerId], references: [id])
+  Option          QuizQuestionOption? @relation(fields: [optionId], references: [id])
+
+  @@map("answer_option")
+}
