@@ -17,6 +17,6 @@ jobs:
         ssh-keyscan -p ${{ secrets.SSH_PORT}} ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
         
     - name: connect and pull
-      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{secrets.SSH_PORT}} "cd ${{ secrets.WORK_DIR }}/Quizarius && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && docker-compose stop && docker-compose up --build && exit"
+      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{secrets.SSH_PORT}} "cd ${{ secrets.WORK_DIR }}/Quizarius && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && docker-compose stop && docker-compose up -d --build && exit"
     - name: cleanup
       run: rm -rf ~/.ssh
