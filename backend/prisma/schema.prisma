@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:postgres@localhost:5432/quizarius_db?schema=public"
+  url      = "postgresql://postgres:postgres@192.168.151.133:5432/quizarius_db?schema=public"
 }
 
 generator client {
