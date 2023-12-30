@@ -50,8 +50,8 @@ const deleteQuestion = () => {
             </v-text-field>
           </div>
           <div class="d-flex justify-center">
-            <v-btn icon="$plus" class="" color="secondary" density="compact" v-if="!question.isOpen" @click="addOption"
-              variant="tonal" elevation="2"></v-btn>
+            <v-btn prepend-icon="$plus" class="" color="secondary" density="compact" v-if="!question.isOpen" @click="addOption"
+              variant="tonal" elevation="2">Додати відповідь</v-btn>
           </div>
         </transition-group>
       </div>

@@ -45,7 +45,7 @@ const submit = async () => {
       <quiz-question-create  v-model:value="question.value" v-for="(question, index) in quiz.questions"
         :key="question.value.qid" @del="deleteQuestion(index)">
       </quiz-question-create>
-      <v-btn icon="$plus"  class=" mt-3" color="secondary" variant="tonal" elevation="2" @click="addQuestion"></v-btn>
+      <v-btn prepend-icon="$plus"  class=" mt-3" color="secondary" variant="tonal" elevation="2" @click="addQuestion">Додати питання</v-btn>
     <v-btn class="quiz-btn mt-5" @click="submit">Опублікувати</v-btn>
     </transition-group>
     <!--    <p style="color: green">{{ JSON.stringify(quiz, null, 2) }}</p>-->

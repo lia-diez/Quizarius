@@ -27,7 +27,7 @@ const {data: account, logout} = inject(accountKey) as {
         <v-card-text>
           <v-window v-model="tab">
             <v-window-item value="login">
-              <loginform></loginform>
+              <loginform @close="dialog = !dialog"></loginform>
             </v-window-item>
             <v-window-item value="register">
               <registerform @close="dialog = !dialog"></registerform>

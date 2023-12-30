@@ -1,14 +1,22 @@
 <script setup lang="ts">
 
-import { reactive, ref, watch } from "vue";
+import { inject, reactive, ref, watch } from "vue";
 import { loginRules, passwordRules } from "./rules.ts";
+import { accountKey } from "../../inject-keys";
+import HttpClient from "../../helpers/httpClient";
+import { saveAuth } from "../../helpers/jwt";
 
 const loginData = reactive<{
   login?: string
   password?: string
 }>({})
 
+const { login } = inject(accountKey) as { login: () => void }
 const form = ref()
+
+const emits = defineEmits<{
+  (e: 'close'): void
+}>()
 const valid = ref<boolean>(false)
 
 async function validate() {
@@ -20,8 +28,12 @@ watch(loginData, () => {
   validate()
 }, { deep: true })
 
-const submit = () => {
-  //HttpClient.post('api/auth/token', JSON.stringify(loginData))
+const submit = async () => {
+  const { data } = await HttpClient.post('api/auth/login', JSON.stringify(loginData));
+  HttpClient.defaults.headers.Authorization = `Bearer ${data.token}`
+  saveAuth(data.token)
+  login()
+  emits('close')
 }
 </script>
 
