@@ -53,6 +53,7 @@ export class QuizController {
 		@Body() dto: PostQuizDto
 	): Promise<Quiz> {
 		const quiz = dtoToQuiz(dto);
+		console.log(quiz);
 		this.quizService.postQuiz(req.user.id, quiz);
 		return quiz;
 	}

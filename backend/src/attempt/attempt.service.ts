@@ -300,8 +300,10 @@ export class AttemptService {
     public async getAttemptsByStudentWithResult(user: User, groupId: string, studentId: string): Promise<{ attempt: AttemptInfo, quiz: Quiz, grade: number }[]> {
         // it also checks if teacher has access to the quiz
         let quizzes = await this.quizService.getQuizzesByGroup(user.id, groupId);
+        console.log(quizzes);
         if (user.role === 'student') {
             quizzes = quizzes.filter(quiz => quiz.isVisible);
+            console.log(quizzes);
         }
 
         const attempts = await this.prismaService.userAttempt.findMany({

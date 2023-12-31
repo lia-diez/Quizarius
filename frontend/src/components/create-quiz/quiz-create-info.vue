@@ -90,8 +90,8 @@ watch(quizInfo, (value) => { emits('update:value', value) })
         </transition-group>
       </div>
       <div class="d-flex flex-row flex-wrap ml-2">
-        <v-switch class="flex-row" label="Перегляд відповідей" color="secondary" density="compact"
-          v-model="quizInfo.isViewAnswers" hide-details></v-switch>
+        <v-switch class="flex-row" label="  Перегляд відповідей" color="secondary" density="compact"
+          v-model="quizInfo.isVisible" hide-details></v-switch>
       </div>
     </q-card-text>
   </q-card>

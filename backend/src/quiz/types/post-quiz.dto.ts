@@ -45,7 +45,7 @@ export class PostQuizInfoDto {
     @ApiProperty()
     @IsBoolean()
     @IsOptional()
-    isVisible: boolean = false
+    isVisible: boolean
 }
 
 export class PostQuizQuestionOptionDto {
