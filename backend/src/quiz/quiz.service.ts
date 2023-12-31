@@ -23,6 +23,7 @@ export class QuizService {
                 timeLimitHours: quiz.info.timeLimitHours,
                 timeLimitMinutes: quiz.info.timeLimitMinutes,
                 name: quiz.info.name,
+                isVisible: quiz.info.isVisible,
                 questions: {
                     create: quiz.questions.map(question => {
                         return {

@@ -5,6 +5,7 @@ import { QuizService } from 'src/quiz/quiz.service';
 import { Quiz } from 'src/quiz/types/quiz';
 import { AttemptDto } from './dto/attempt.dto';
 import { AttemptInfo } from './types/attempt';
+import { User } from 'src/auth/types/user';
 
 @Injectable()
 export class AttemptService {
@@ -183,7 +184,7 @@ export class AttemptService {
                 where: {
                     attemptId: attemptId
                 }
-            }).then(async (answers: { id: string; attemptId: string; questionId: string; options: (string | UUID)[]}[]) => {
+            }).then(async (answers: { id: string; attemptId: string; questionId: string; options: (string | UUID)[] }[]) => {
                 const resolvedAnswers = await Promise.all(answers.map(async answer => {
                     return {
                         id: answer.id as UUID,
@@ -256,7 +257,7 @@ export class AttemptService {
         return true;
     }
 
-    public async verifyAnswerOption(userId: string, attemptId: string, questionId: string, value: boolean): Promise<{id: string, value: boolean}> {
+    public async verifyAnswerOption(userId: string, attemptId: string, questionId: string, value: boolean): Promise<{ id: string, value: boolean }> {
         // there is no optionId on front, so have to find the option which is openAnswer
         // this option has to be the only one in this attempt for this question
         const option = await this.prismaService.attemptAnswer.findFirst({
@@ -293,16 +294,21 @@ export class AttemptService {
             }
         });
 
-        return {id: updatedOption.id as UUID, value: updatedOption.isCorrect};
+        return { id: updatedOption.id as UUID, value: updatedOption.isCorrect };
     }
 
-    public async getAttemptsByStudentWithResult(userId: string, groupId: string, studentId: string): Promise<{ attempt: AttemptInfo, quiz: Quiz, grade: number }[]> {
+    public async getAttemptsByStudentWithResult(user: User, groupId: string, studentId: string): Promise<{ attempt: AttemptInfo, quiz: Quiz, grade: number }[]> {
+        // it also checks if teacher has access to the quiz
+        let quizzes = await this.quizService.getQuizzesByGroup(user.id, groupId);
+        if (user.role === 'student') {
+            quizzes = quizzes.filter(quiz => quiz.isVisible);
+        }
+
         const attempts = await this.prismaService.userAttempt.findMany({
             where: {
                 userId: studentId,
                 quizId: {
-                    // it also checks if teacher has access to the quiz
-                    in: await this.quizService.getQuizzesByGroup(userId, groupId).then(quizzes => quizzes.map(quiz => quiz.id))
+                    in: quizzes.map(quiz => quiz.id)
                 },
                 answers: {
                     every: {

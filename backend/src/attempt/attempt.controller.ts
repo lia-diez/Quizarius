@@ -58,9 +58,8 @@ export class AttemptController {
         return 'loh';
     }
 
-    @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(AuthGuard)
     @ApiBearerAuth()
-    @Roles(Role.Teacher)
     @Get('group/:groupId/student/:studentId')
     public async getAttemptsByStudentWithResult(
         @Request() req,
@@ -69,7 +68,7 @@ export class AttemptController {
         @Query() query: ResultDto
     ): Promise<{attempt: AttemptInfo, quiz: Quiz, grade?: number}[]> {
         if (query.result)
-            return this.attemptService.getAttemptsByStudentWithResult(req.user.id, groupId, studentId);
+            return this.attemptService.getAttemptsByStudentWithResult(req.user, groupId, studentId);
         else
             return this.attemptService.getAttemptsByStudent(req.user.id, groupId, studentId);
     }

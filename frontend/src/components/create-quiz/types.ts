@@ -25,4 +25,5 @@ export type createQuizInfo = {
     timeLimitHours: number
     timeLimitMinutes: number
     groupId: string | null
+    isViewAnswers: boolean
 }

@@ -23,7 +23,7 @@ const getRequests = async () => {
 }
 
 const copyText = () => {
-    navigator.clipboard.writeText(`https://quizaruis.pp.ua/invite/${props.groupId}`)
+    navigator.clipboard.writeText(`https://quizarius.pp.ua/invite/${props.groupId}`)
 }
 
 const acceptRequest = async (id: string) => {
@@ -50,7 +50,7 @@ watch(() => props.groupId, () => {
         <q-card-text class="text-center">
             <v-label>Посилання для запрошення</v-label>
             <v-text-field prepend-inner-icon="$clipboard" @click="copyText" variant="solo-filled" readonly
-                density="compact">https://quizaruis.pp.ua/invite/{{ groupId }}</v-text-field>
+                density="compact">https://quizarius.pp.ua/invite/{{ groupId }}</v-text-field>
             <v-label v-if="!requests?.length">Наразі ніхто не очікує на підтвердження запиту</v-label>
             <div>
                 <div v-for="request in requests" :key="request.id">

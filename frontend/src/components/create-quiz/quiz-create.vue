@@ -17,7 +17,8 @@ const quiz = reactive<createQuiz>({
     retries: 1,
     timeLimitHours: 0,
     timeLimitMinutes: 5,
-    name: null
+    name: null,
+    isViewAnswers: false
   },
   questions: []
 })

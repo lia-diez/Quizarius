@@ -65,7 +65,6 @@ watch(quizInfo, (value) => { emits('update:value', value) })
       <v-text-field label="Назва" variant="solo-filled" hide-details v-model="quizInfo.name"></v-text-field>
       <date-picker-popup class="mt-4" v-model:value="quizInfo.deadLine">
       </date-picker-popup>
-
       <v-select variant="solo-filled" class="mt-4" label="Курс" v-model="quizInfo.groupId" :items="cources"
         item-title="name" item-value="id">
         <template v-slot:item="{ props, item }">
@@ -89,6 +88,10 @@ watch(quizInfo, (value) => { emits('update:value', value) })
           <q-counter suffix="хв." v-if="quizInfo.hasTimeLimit" :min-value="0" :max-value="55"
             v-model:value="quizInfo.timeLimitMinutes" :step="5"></q-counter>
         </transition-group>
+      </div>
+      <div class="d-flex flex-row flex-wrap ml-2">
+        <v-switch class="flex-row" label="Перегляд відповідей" color="secondary" density="compact"
+          v-model="quizInfo.isViewAnswers" hide-details></v-switch>
       </div>
     </q-card-text>
   </q-card>
