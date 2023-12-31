@@ -22,7 +22,8 @@ const valid = ref<boolean>(false)
 
 async function validate() {
   const { valid: validated } = await form.value.validate()
-  valid.value = validated;
+  const passEq = loginData.password === password.value
+  valid.value = validated && passEq;
 }
 
 watch(loginData, () => {
@@ -44,7 +45,7 @@ const submit = async () => {
       v-model="loginData.login"></v-text-field>
     <v-text-field variant="solo-filled" label="Пароль" class="w-100" type="password"
       v-model="loginData.password" :rules="passwordRules"></v-text-field>
-    <v-text-field variant="solo-filled" label="Повторіть пароль" class="w-100" hide-details type="password"
+    <v-text-field variant="solo-filled" :rules="passwordRules" label="Повторіть пароль" class="w-100" hide-details type="password"
       v-model="password"></v-text-field>
     <v-btn-toggle mandatory rounded="xl" v-model="loginData.role" color="primary" elevation="2" class=" mt-5 mb-5">
       <v-btn value="student">Я учень</v-btn>

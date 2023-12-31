@@ -86,5 +86,6 @@ const attemptsByQuiz = computed(
                 </v-card>
             </v-expansion-panel-text>
         </v-expansion-panel>
+        <v-label v-if="!attempts?.length">Немає спроб</v-label>
     </v-expansion-panels>
 </template>

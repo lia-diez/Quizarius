@@ -183,7 +183,7 @@ export class AttemptService {
                 where: {
                     attemptId: attemptId
                 }
-            }).then(async (answers: { id: string; attemptId: string; questionId: string; options: (string | UUID)[] }[]) => {
+            }).then(async (answers: { id: string; attemptId: string; questionId: string; options: (string | UUID)[]}[]) => {
                 const resolvedAnswers = await Promise.all(answers.map(async answer => {
                     return {
                         id: answer.id as UUID,
@@ -194,7 +194,7 @@ export class AttemptService {
                             }
                         }).then(options => {
                             return options.map(option => option.openAnswer ? option.openAnswer : option.optionId);
-                        })
+                        }),
                     }
                 }));
                 return resolvedAnswers;
@@ -256,7 +256,7 @@ export class AttemptService {
         return true;
     }
 
-    public async verifyAnswerOption(userId: string, attemptId: string, questionId: string, value: boolean): Promise<boolean> {
+    public async verifyAnswerOption(userId: string, attemptId: string, questionId: string, value: boolean): Promise<{id: string, value: boolean}> {
         // there is no optionId on front, so have to find the option which is openAnswer
         // this option has to be the only one in this attempt for this question
         const option = await this.prismaService.attemptAnswer.findFirst({
@@ -293,7 +293,7 @@ export class AttemptService {
             }
         });
 
-        return updatedOption.isCorrect;
+        return {id: updatedOption.id as UUID, value: updatedOption.isCorrect};
     }
 
     public async getAttemptsByStudentWithResult(userId: string, groupId: string, studentId: string): Promise<{ attempt: AttemptInfo, quiz: Quiz, grade: number }[]> {

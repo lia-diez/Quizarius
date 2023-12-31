@@ -13,6 +13,8 @@ const props = defineProps<{
 }>()
 const emits = defineEmits<{
   (e: 'update:value', value: Map<string, string[]>): void
+  (e: 'verify'): void
+  (e: 'reject'): void
 }>()
 
 const singleValue = computed<string>({
@@ -49,9 +51,9 @@ const multiValue = computed<string[]>({
       <div v-if="quizItem.isOpen">
         <v-textarea variant="solo-filled" label="Відповідь" :readonly="readonly" hide-details
           v-model="singleValue" :prepend-icon="(quizItem.options?.[0]?.isCorrect ? '$check' : '')"></v-textarea>
-        <div v-if="attempt">
-          <v-btn class="mt-2 mr-3" variant="tonal" elevation="2" color="secondary" prepend-icon="$check">Правильно</v-btn>
-          <v-btn class="mt-2 mr-3" variant="tonal" elevation="2" color="error" prepend-icon="$close">неправильно</v-btn>
+        <div v-if="attempt" >
+          <v-btn class="mt-2 mr-3" variant="tonal" elevation="2" color="secondary" prepend-icon="$check" @click="$emit('verify')">Правильно</v-btn>
+          <v-btn class="mt-2 mr-3" variant="tonal" elevation="2" color="error" prepend-icon="$close" @click="$emit('reject')">неправильно</v-btn>
         </div>
 
       </div>

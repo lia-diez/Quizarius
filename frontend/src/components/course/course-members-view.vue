@@ -38,7 +38,7 @@ watch(() => props.groupId, () => {
         </q-card-title>
         <q-card-text>
             <v-label v-if="!members?.length">Наразі ніхто не входить до групи</v-label>
-            <v-label v-if="isTeacher"> Неперевірені спроби</v-label>
+            <v-label v-if="isTeacher && members?.length"> Неперевірені спроби</v-label>
             <div v-if="isTeacher">
                 <v-expansion-panels>
                     <v-expansion-panel  v-for="member in members" :title="member.login" icon="mdi-account">
@@ -48,6 +48,7 @@ watch(() => props.groupId, () => {
                     </v-expansion-panel>
                 </v-expansion-panels>
             </div>
+            <v-label class="mt-3" v-if="members?.length">Результати проходження тестів</v-label>
             <v-expansion-panels>
                     <v-expansion-panel  v-for="member in members" :title="member.login" icon="mdi-account">
                         <v-expansion-panel-text>

@@ -77,24 +77,24 @@ export class AttemptController {
     @UseGuards(AuthGuard, RolesGuard)
     @ApiBearerAuth()
     @Roles(Role.Teacher)
-    @Post('attempt/:attemptId/question/:questionId/verify')
+    @Post(':attemptId/question/:questionId/verify')
     public async verifyQuestion(
         @Request() req,
         @Param('attemptId', new ParseUUIDPipe()) attemptId: string,
         @Param('questionId', new ParseUUIDPipe()) questionId: string
-    ): Promise<boolean> {
+    ): Promise<{id: string, value: boolean}> {
         return this.attemptService.verifyAnswerOption(req.user.id, attemptId, questionId, true);
     }
 
     @UseGuards(AuthGuard, RolesGuard)
     @ApiBearerAuth()
     @Roles(Role.Teacher)
-    @Post('attempt/:attemptId/question/:questionId/decline')
+    @Post(':attemptId/question/:questionId/decline')
     public async declineQuestion(
         @Request() req,
         @Param('attemptId', new ParseUUIDPipe()) attemptId: string,
         @Param('questionId', new ParseUUIDPipe()) questionId: string
-    ): Promise<boolean> {
+    ): Promise<{id: string, value: boolean}> {
         return this.attemptService.verifyAnswerOption(req.user.id, attemptId, questionId, false);
     }
 }

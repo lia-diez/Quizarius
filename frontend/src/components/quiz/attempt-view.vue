@@ -15,6 +15,8 @@ const attempt = ref<{
     }[],
 }>()
 
+const isResult = route.matched[0].path === '/result/:id'
+
 let answers = ref(new Map<string, string[]>())
 let quiz = ref<Quiz | null>(null);
 
@@ -33,11 +35,23 @@ const getAttempt = async () => {
     }
 }
 
+const verify = async (questionId: string) => {
+    await HttpClient.post(`/api/attempt/${route.params.id}/question/${questionId}/verify`)
+    await getAttempt()
+}
+
+const reject = async (questionId: string) => {
+    await HttpClient.post(`/api/attempt/${route.params.id}/question/${questionId}/decline`)
+    await getAttempt()
+}
+
 getAttempt()
 
 </script>
 <template>
     <q-card-container>
-        <quiz-item attempt readonly :quiz-item="q" v-model:value="answers" v-for="q in quiz?.questions"></quiz-item>
+        <quiz-item :attempt="!isResult" readonly :quiz-item="q" v-model:value="answers" v-for="q in quiz?.questions"
+            @verify="verify(q.id)"
+            @reject="reject(q.id)"></quiz-item>
     </q-card-container>
 </template>

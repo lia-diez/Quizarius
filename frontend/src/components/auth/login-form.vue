@@ -29,7 +29,7 @@ watch(loginData, () => {
 }, { deep: true })
 
 const submit = async () => {
-  const { data } = await HttpClient.post('api/auth/login', JSON.stringify(loginData));
+  const { data } = await HttpClient.post('api/auth/login', JSON.stringify(loginData))
   HttpClient.defaults.headers.Authorization = `Bearer ${data.token}`
   saveAuth(data.token)
   login()

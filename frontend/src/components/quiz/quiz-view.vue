@@ -118,9 +118,6 @@ const submit = (): void => {
         Назад
       </v-btn>
     </q-card-container>
-    <v-label>
-      {{ JSON.stringify(Object.fromEntries(answers), null, 2) }}
-    </v-label>
   </q-loader>
 
 </template>
